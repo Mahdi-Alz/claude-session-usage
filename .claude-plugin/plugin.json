@@ -1,0 +1,9 @@
+{
+  "name": "usage-monitor",
+  "version": "0.1.0",
+  "description": "Shows this session's token usage by model and its share of the 5h and weekly limits, next to the limits split by model",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Mahdi Alizadeh"
+  }
+}

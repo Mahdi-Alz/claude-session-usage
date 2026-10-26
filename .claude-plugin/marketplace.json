@@ -1,0 +1,14 @@
+{
+  "name": "claude-session-usage",
+  "description": "Session and plan usage monitor for Claude Code",
+  "owner": {
+    "name": "Mahdi Alizadeh"
+  },
+  "plugins": [
+    {
+      "name": "usage-monitor",
+      "source": "./",
+      "description": "Shows this session's token usage by model and its share of the 5h and weekly limits, next to the limits split by model"
+    }
+  ]
+}
