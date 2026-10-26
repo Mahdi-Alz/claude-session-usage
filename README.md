@@ -1,47 +1,88 @@
-# usage-monitor
+# Claude Session Usage
 
-A Claude Code pane that shows where your tokens go in the current session and how much of your plan's 5-hour and weekly limits it has used.
+See how much of your Claude plan each session is using, broken down by model, right next to your chat.
 
-## What it shows
+<p align="center"><img src="docs/usage-pane.svg" alt="The Usage pane" width="400"></p>
+
+## Why
+
+Claude Code tells you how much of your 5-hour and weekly limits you have used, as one number for your whole account. It doesn't tell you where that usage came from.
+
+When you work in several sessions at once, or switch between Opus and Sonnet, you can't tell which session or which model is eating your limit. You end up guessing, or hitting the limit without knowing why.
+
+This plugin answers that. Every session shows its own usage, split by model, and what share of your 5-hour and weekly limits it is responsible for.
+
+## What you get
+
+A **Usage** pane that opens with every session, in two parts.
 
 **Current Session**
 
-- **Tokens by model**: a bar split by model, with each model's token count and its share of the session
-- **Share of 5h usage** and **Share of weekly usage**: how much of the usage so far in each window came from this session, plus its share of the whole limit
+- **Tokens by model**: how this session's tokens split between models, with each model's count and percentage
+- **Share of 5h usage**: how much of the usage in the current 5-hour window came from this session, and how much of the whole limit that is
+- **Share of weekly usage**: the same for the weekly limit
 
 **All Usage**
 
-- **5h** and **Weekly** bars with time left until reset, split by model across every session that runs the mod. Grey is usage the mod didn't see (claude.ai, other machines, or before it was installed)
+- **5h** and **Weekly** bars with the time left until each resets, colored by model across all your sessions
+- Grey shows usage the plugin didn't see, such as claude.ai in the browser or another computer
 
-Each model family has a fixed color: Opus crimson, Sonnet purple, Haiku green. Older versions of a family use a lighter shade.
+Each model family keeps the same color everywhere: Opus is crimson, Sonnet purple, Haiku green. Older versions of a family use a lighter shade.
 
 ## Install
 
-At the prompt of a terminal session:
+You need Claude Code signed in with a Claude subscription, such as Pro or Max. The 5-hour and weekly limits only exist on subscription plans.
+
+### Desktop app
+
+1. Click **+** next to the prompt box
+2. Choose **Plugins**, then **Add marketplace**
+3. Enter `Mahdi-Alz/claude-session-usage`
+4. Click **Add plugin** next to **usage-monitor**
+
+### Terminal
+
+Type this at the Claude Code prompt:
 
 ```
 /plugin install usage-monitor --marketplace Mahdi-Alz/claude-session-usage
 ```
 
-From a shell:
+Answer `y` to add the marketplace, then press Enter to install for your user.
+
+Or from your shell:
 
 ```
 claude plugin install usage-monitor --marketplace Mahdi-Alz/claude-session-usage
 ```
 
-In the desktop app: click + next to the prompt box, then Plugins, Add marketplace with `Mahdi-Alz/claude-session-usage`, then Add plugin.
+### After installing
 
-The pane opens when a session starts. Run `/usage-monitor` to open it again after closing it.
+Start a new session. The Usage pane opens by itself. If you close it, type `/usage-monitor` to bring it back.
 
-## How the numbers are worked out
+The limit bars appear after the first reply in a session, or straight away if another session has already seen them.
 
-Claude Code reports the 5-hour and weekly limits as a single percentage for your account, with no breakdown by session or model. The mod fills that in:
+## How the numbers work
 
-- Each session records its own tokens per model and saves them to storage shared by all sessions on the machine
-- Tokens are weighted by relative price (Opus more than Sonnet, Sonnet more than Haiku, output more than input, cache reads much less) to estimate how much each one counts toward the limit
-- The usage already on the limit when the mod first sees a window counts as untracked
-- The rest is split between sessions and models by their weighted usage
+Claude Code reports your limits as a single percentage per window, with no breakdown. The plugin works out the breakdown itself:
 
-So the per-session and per-model shares are estimates. The total percentage and the time left come straight from Claude Code.
+- Each session records the tokens it uses per model and shares that with your other sessions on the same computer
+- Tokens are weighted by price, because a token of Opus output counts for much more of your limit than a cached token of Haiku
+- Usage that was already on the limit before the plugin saw the window counts as untracked
+- Everything else is split between sessions and models by their weighted usage
 
-The limits only show for accounts on a subscription plan, after the first reply of a session or from the last reading saved by another session.
+The total percentages and the time left come straight from Claude Code. The split between sessions and models is an estimate, and it is only as complete as the sessions running the plugin.
+
+## Uninstall
+
+In the terminal:
+
+```
+claude plugin uninstall usage-monitor
+```
+
+In the desktop app, remove it from **+ → Plugins**.
+
+## License
+
+MIT
